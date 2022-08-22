@@ -7,6 +7,10 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>JavaVulnerableLab Maven Webapp</name>
   <url>http://maven.apache.org</url>
+  <properties>
+     <maven.compiler.source>1.8</maven.compiler.source>
+     <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -42,6 +46,34 @@
 </dependency>	 	
   </dependencies>
   <build>
-    <finalName>JavaVulnerableLab</finalName>
+	  <finalName>JavaVulnerableLab</finalName>
+    <plugins>
+        <plugin>
+          <groupId>com.github.spotbugs</groupId>
+          <artifactId>spotbugs-maven-plugin</artifactId>
+          <version>4.7.1.1</version>
+  </plugin>
+	 <plugin>
+          <groupId>org.owasp</groupId>
+          <artifactId>dependency-check-maven</artifactId>
+          <version>5.3.2</version>
+          <executions>
+            <execution>
+               <goals>
+                  <goal>check</goal>
+               </goals>
+            </execution>
+          </executions>
+          </plugin>
+    </plugins>
   </build>
+<reporting>
+    <plugins>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>4.7.1.1</version>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>
