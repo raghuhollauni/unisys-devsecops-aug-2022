@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database
+  labels:
+    app: db
+spec:
+  template:
+    metadata:
+      labels:
+        app: db
+        version: "13.4"
+        env: training
+    spec:
+      containers:
+        - name: db
+          image: postgres:13.4
+          resources:
+            limits:
+              cpu: 200m
+              memory: 400Mi
+  replicas: 1
+  selector:
+    matchLabels:
+      env: training
