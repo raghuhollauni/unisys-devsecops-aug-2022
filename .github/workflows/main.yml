@@ -32,3 +32,16 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B clean install --file pom.xml
+      
+  misconfiguration-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: setting up trivy
+      run: wget https://github.com/aquasecurity/trivy/releases/download/v0.31.2/trivy_0.31.2_Linux-64bit.deb && sudo dpkg -i trivy_0.31.2_Linux-64bit.deb
+    - name: check Dockerfile
+      run: trivy config Dockerfile
+    - name: Check Terraform Configuration file
+      run: trivy config main.tf
+    - name: Check k8s yaml
+      run: trivy config deployment.yaml
