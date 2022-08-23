@@ -92,3 +92,25 @@ jobs:
       run: docker login ghcr.io -u raghuhollauni -p ${{ secrets.PAT }}
     - name: Push Image
       run: docker image push ghcr.io/raghuhollauni/javavulnerablelab:latest
+
+  image-scanning:
+    needs:
+      - build-image
+    runs-on: ubuntu-latest
+    steps:
+    - name: setting up trivy
+      run: wget https://github.com/aquasecurity/trivy/releases/download/v0.31.2/trivy_0.31.2_Linux-64bit.deb && sudo dpkg -i trivy_0.31.2_Linux-64bit.deb
+    - name: Install Docker
+      run: |
+        sudo apt update -y 
+        sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+        sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" && sudo apt update
+        apt-cache policy docker-ce
+        sudo apt install -y docker-ce
+    - name: login to GHCR
+      run: docker login ghcr.io -u kmayer10 -p ${{ secrets.PAT }}
+    - name: Pull Image
+      run: docker image pull ghcr.io/kmayer10/javavulnerablelab:latest
+    - name: Scan Image
+      run: trivy image ghcr.io/kmayer10/javavulnerablelab:latest
