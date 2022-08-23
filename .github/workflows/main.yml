@@ -61,3 +61,30 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B clean package --file pom.xml
+    - name: upload war file
+      uses: actions/upload-artifact@v2
+      with: 
+        name: JavaVulnerableLab
+        path: target/JavaVulnerableLab.war
+        
+  build-image:
+    needs:
+      - build-war
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install Docker
+      run: |
+        sudo apt update -y 
+        sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+        sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" && sudo apt update
+        apt-cache policy docker-ce
+        sudo apt install -y docker-ce
+    - name: download war
+      uses: actions/download-artifact@v2
+      with: 
+        name: JavaVulnerableLab
+        path: ./
+    - name: build Image
+      run: docker image build . -t ghcr.io/javavulnerablelab:latest
