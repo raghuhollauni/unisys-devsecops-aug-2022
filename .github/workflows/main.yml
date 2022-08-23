@@ -109,8 +109,8 @@ jobs:
         apt-cache policy docker-ce
         sudo apt install -y docker-ce
     - name: login to GHCR
-      run: docker login ghcr.io -u kmayer10 -p ${{ secrets.PAT }}
+      run: docker login ghcr.io -u raghuhollauni -p ${{ secrets.PAT }}
     - name: Pull Image
-      run: docker image pull ghcr.io/kmayer10/javavulnerablelab:latest
+      run: docker image pull ghcr.io/raghuhollauni/javavulnerablelab:latest
     - name: Scan Image
-      run: trivy image ghcr.io/kmayer10/javavulnerablelab:latest
+      run: trivy image ghcr.io/raghuhollauni/javavulnerablelab:latest
