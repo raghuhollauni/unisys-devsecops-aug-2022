@@ -128,6 +128,7 @@ jobs:
       - deploy-application
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v3
     - name: Install Docker
       run: |
         sudo apt update -y 
@@ -136,12 +137,10 @@ jobs:
         sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" && sudo apt update
         apt-cache policy docker-ce
         sudo apt install -y docker-ce
-    - name: Pull Image
-      run: docker image pull owasp/zap2docker-stable:latest
     - name: running zap
-      run: docker container run -i owasp/zap2docker-stable:latest zap-baseline.py -t "http://3.135.118.152:8080/javavulnerablelab/" -l PASS > zap_baseline_report.html
+      run: sh run_zap.sh
     - name: upload zap report
       uses: actions/upload-artifact@v2
       with: 
         name: Zap_Report
-        path: zap_baseline_report.htm
+        path: zap_baseline_report.html
